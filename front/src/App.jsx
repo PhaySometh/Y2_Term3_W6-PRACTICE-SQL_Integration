@@ -9,6 +9,7 @@ import {
 import ArticleList from "./components/ArticleList";
 import ArticleForm from "./components/ArticleForm";
 import ArticlePage from "./components/ArticlePage";
+import JournalistArticles from "./components/JournalistArticles";
 
 function App() {
   return (
@@ -18,8 +19,8 @@ function App() {
       </header>
 
       <nav>
-       <NavLink to="/articles" end className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}> View Articles</NavLink>
-       <NavLink to="/articles/add" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}> + Create Article</NavLink>
+        <NavLink to="/articles" end className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}> View Articles</NavLink>
+        <NavLink to="/articles/add" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}> + Create Article</NavLink>
       </nav>
 
       <Routes>
@@ -31,6 +32,10 @@ function App() {
           element={<ArticleForm isEdit={true} />}
         />
         <Route path="/articles/:id" element={<ArticlePage />} />
+        <Route
+          path="/articles/journalists/:journalistId/articles"
+          element={<JournalistArticles />}
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -9,7 +9,7 @@ export default function ArticleForm({ isEdit }) {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    journalist: "",
+    journalistId: "",
     category: "",
   });
 
@@ -27,7 +27,12 @@ export default function ArticleForm({ isEdit }) {
     setError("");
     try {
       const article = await getArticleById(id);
-      setFormData(article);
+      setFormData({
+      title: article.title,
+      content: article.content,
+      journalistId: article.journalistId,
+      category: article.category,
+      });
     } catch (err) {
       setError("Failed to load article. Please try again.");
     } finally {
@@ -52,7 +57,7 @@ export default function ArticleForm({ isEdit }) {
       }
       navigate("/articles");
     } catch (err) {
-      setError("Failed to submit article.");
+      setError("Failed to submit the article.", err.message);
     } finally {
       setIsLoading(false);
     }
@@ -82,8 +87,8 @@ export default function ArticleForm({ isEdit }) {
         />
         <br />
         <input
-          name="journalist"
-          value={formData.journalist}
+          name="journalistId"
+          value={formData.journalistId}
           onChange={handleChange}
           placeholder="Journalist ID"
           required
