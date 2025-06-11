@@ -28,49 +28,8 @@ export const removeArticle = async (id) => {
   return response.data;
 };
 
-
-// OLD VERSION - MOCK
-
-// let articles = [
-//   {
-//     id: "1",
-//     title: "React Basics",
-//     content: "Learn React",
-//     journalist: "Alice",
-//     category: "Frontend",
-//   },
-//   {
-//     id: "2",
-//     title: "Routing",
-//     content: "React Router",
-//     journalist: "Bob",
-//     category: "Frontend",
-//   },
-// ];
-
-// export function getArticles() {
-//   return articles;
-// }
-
-// export function getArticleById(id) {
-//   return articles.find((a) => a.id === id);
-// }
-
-// export function removeArticle(id) {
-//   articles = articles.filter((a) => a.id !== id);
-// }
-
-// export function createArticle(article) {
-//   const newArticle = { ...article, id: String(Date.now()) };
-//   articles.push(newArticle);
-//   return newArticle;
-// }
-
-// export function updateArticle(id, updatedData) {
-//   const index = articles.findIndex((a) => a.id === id);
-//   if (index !== -1) {
-//     articles[index] = { ...articles[index], ...updatedData };
-//     return articles[index];
-//   }
-//   return null;
-// }
+// New API call to get all articles by a journalist
+export const getArticlesByJournalist = async (journalistId) => {
+  const response = await axios.get(`${API_BASE_URL}/articles/journalists/${journalistId}/articles`);
+  return response.data;  // Should be an array of articles with journalist info included
+};
