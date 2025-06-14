@@ -8,10 +8,24 @@ export const getArticles = async () => {
   return response.data;
 };
 
+export const getCategory = async () => {
+  const response = await axios.get(`${API_BASE_URL}/articles/category`);
+  return response.data;
+};
+
 export const getArticleById = async (id) => {
   const response = await axios.get(`${API_BASE_URL}/articles/${id}`);
   return response.data;
 };
+export const getJournalist = async () => {
+  const response = await axios.get(`${API_BASE_URL}/articles/journalist`);
+  return response.data;
+};
+export const getArticlesByJournalistId = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/articles/journalists/${id}/articles`);
+  return response.data;
+};
+
 
 export const createArticle = async (article) => {
   const response = await axios.post(`${API_BASE_URL}/articles`, article);
@@ -26,10 +40,4 @@ export const updateArticle = async (id, updatedData) => {
 export const removeArticle = async (id) => {
   const response = await axios.delete(`${API_BASE_URL}/articles/${id}`);
   return response.data;
-};
-
-// New API call to get all articles by a journalist
-export const getArticlesByJournalist = async (journalistId) => {
-  const response = await axios.get(`${API_BASE_URL}/articles/journalists/${journalistId}/articles`);
-  return response.data;  // Should be an array of articles with journalist info included
 };
