@@ -5,13 +5,15 @@ import {
   Navigate,
   NavLink,
 } from "react-router-dom";
-
 import ArticleList from "./components/ArticleList";
 import ArticleForm from "./components/ArticleForm";
 import ArticlePage from "./components/ArticlePage";
-import JournalistArticles from "./components/JournalistArticles";
+import JournalistArticlePage from './components/JournalistArticles';
+
+
 
 function App() {
+
   return (
     <BrowserRouter>
       <header>
@@ -32,10 +34,7 @@ function App() {
           element={<ArticleForm isEdit={true} />}
         />
         <Route path="/articles/:id" element={<ArticlePage />} />
-        <Route
-          path="/articles/journalists/:journalistId/articles"
-          element={<JournalistArticles />}
-        />
+        <Route path="/journalists/:id" element={<JournalistArticlePage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getArticleById, getArticlesByJournalist } from '../services/api';
+import { getArticleById } from '../services/api';
 
 export default function ArticlePage() {
     const { id } = useParams();
@@ -20,6 +20,7 @@ export default function ArticlePage() {
             const found = await getArticleById(id);
             if (found) {
                 setArticle(found);
+                console.log(found);
                 setError('');
             } else {
                 setArticle(null);
@@ -37,19 +38,15 @@ export default function ArticlePage() {
     if (!article) return <div>No article found.</div>;
 
     return (
-        <div>
+        <div className="article-page">
             <h2>{article.title}</h2>
             <p>{article.content}</p>
-
             <div>
-              <strong>Journalist: </strong>
-              <Link to={`/articles/journalists/${article.journalistId}/articles`}>
-                {article.journalist_name}
-              </Link>
+                <strong>Journalist:</strong>
+                <Link to={`/journalists/${article.journalistId}`}> {article.journalistName || article.journalist_name}</Link>
             </div>
-
             <div>
-                <strong>Category:</strong> {article.category}
+                <strong>Category:</strong> {article.categoryName}
             </div>
         </div>
     );

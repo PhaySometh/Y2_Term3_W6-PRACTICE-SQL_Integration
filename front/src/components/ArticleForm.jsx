@@ -1,6 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getArticleById, createArticle, updateArticle } from "../services/api";
+import { 
+  getArticleById, 
+  createArticle, 
+  updateArticle, 
+  getCategory, 
+  getJournalist 
+} from "../services/api";
 
 export default function ArticleForm({ isEdit }) {
   const { id } = useParams();
@@ -10,16 +16,20 @@ export default function ArticleForm({ isEdit }) {
     title: "",
     content: "",
     journalistId: "",
-    category: "",
+    categoryId: [],
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [journalists, setJournalists] = useState([]);
 
   useEffect(() => {
     if (isEdit && id) {
       fetchArticle(id);
     }
+    fetchCategories();
+    fetchJournalists();
   }, []);
 
   const fetchArticle = async (id) => {
@@ -27,14 +37,39 @@ export default function ArticleForm({ isEdit }) {
     setError("");
     try {
       const article = await getArticleById(id);
-      setFormData({
-      title: article.title,
-      content: article.content,
-      journalistId: article.journalistId,
-      category: article.category,
-      });
+      setFormData(article);
     } catch (err) {
       setError("Failed to load article. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getCategory();
+      console.log("Fetched categories:", data);
+      setCategories(data);
+    } catch (error) {
+      setError("Failed to fetch categories");
+      console.error("Fetch categories error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchJournalists = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getJournalist();
+      console.log("Fetched journalists:", data);
+      setJournalists(data);
+    } catch (error) {
+      setError("Failed to fetch journalists");
+      console.error("Fetch journalists error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -86,21 +121,30 @@ export default function ArticleForm({ isEdit }) {
           required
         />
         <br />
-        <input
+        <select
           name="journalistId"
           value={formData.journalistId}
           onChange={handleChange}
-          placeholder="Journalist ID"
           required
-        />
+        >
+          <option value="">Select Journalist</option>
+          {journalists.map(j => (
+            <option key={j.id} value={j.id}>{j.name}</option>
+          ))}
+        </select>
         <br />
-        <input
-          name="category"
-          value={formData.category}
+        <select
+          name="categoryId"
+          value={formData.categoryId}
           onChange={handleChange}
-          placeholder="Category ID"
           required
-        />
+        >
+          <option value="">Select Category</option>
+          {categories.map(c => (
+            <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
+        </select>
+
         <br />
         <button className="main" type="submit">
           {isEdit ? "Edit " : "Create"}

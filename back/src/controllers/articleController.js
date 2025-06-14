@@ -12,7 +12,26 @@ export async function getAllArticles(req, res) {
         res.status(500).json({ message: 'Server error' });
     }
 }
-
+// get /api/articles/category
+export async function getCategory(req, res) {
+    try {
+        const category = await articleRepository.getCategory();
+        res.json(category);
+    } catch (error) {
+        console.error("Error fetching articles:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+// get /api/articles/journalist
+export async function getJournalist(req, res) {
+    try {
+        const journalist = await articleRepository.getJournalist();
+        res.json(journalist);
+    } catch (error) {
+        console.error("Error fetching journalist:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
 // GET /api/articles/:id
 export async function getArticleById(req, res) {
     try {
@@ -26,36 +45,20 @@ export async function getArticleById(req, res) {
         res.status(500).json({ message: 'Server error' });
     }
 }
-
-// GET /api/articles/:id (with journalist name)
-export async function getArticleWithJournalist(req, res) {
+//GET /api/journalists/:id/articles 
+export async function getArticlesByJournalistId(req, res) {
     try {
-        const result = await articleRepository.getArticleWithJournalist(
-            req.params.id
-        );
-        if (!result || result.length === 0) {
-            return res.status(404).json({ message: 'Article not found' });
+        // const id = req.params.id;
+        const article = await articleRepository.getArticlesByJournalistId(req.params.id);
+        if (!article) {
+        return res.status(404).json({ message: "Journalist not found" });
         }
-        res.json(result[0]); // Send only the first (and only) article
-    } catch (error) {
-        console.error('Error fetching article with journalist:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.json(article);
+    } catch (err) {
+        console.error("Error fetching article:", err);
+        res.status(500).json({ message: "Server error" });
     }
 }
-
-// GET /api/journalists/:id/articles
-export async function getArticleByJournalistId(req, res) {
-    try {
-        const articles = await articleRepository.getArticleByJournalistId(
-            req.params.id
-        );
-        res.json(articles);
-    } catch (error) {
-        console.error('Error fetching articles by journalist ID:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-}
-
 // POST /api/articles
 export async function createArticle(req, res) {
     try {
@@ -66,7 +69,6 @@ export async function createArticle(req, res) {
         res.status(500).json({ message: 'Server error' });
     }
 }
-
 // PUT /api/articles/:id
 export async function updateArticle(req, res) {
     try {
@@ -83,7 +85,6 @@ export async function updateArticle(req, res) {
         res.status(500).json({ message: 'Server error' });
     }
 }
-
 // DELETE /api/articles/:id
 export async function deleteArticle(req, res) {
     try {
